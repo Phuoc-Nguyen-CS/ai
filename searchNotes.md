@@ -54,7 +54,7 @@
 
 > The given code removes the last node in the frontier and returns it.
 
-`
+```
 def remove(self):
     if self.empty():
         raise Exception('Empty Frontier')
@@ -62,7 +62,7 @@ def remove(self):
         node = self.frontier[-1]
         self.frontier = self.frontier[-1]
         return node
-`
+```
 
 ### Breadth-First Search (BFS)
 
@@ -76,7 +76,7 @@ def remove(self):
 
 > The given code shows removes the first node in the frontier and returns it
 
-`
+```
 def remove(self):
     if self.empty():
         raise exception('Empty Frontier')
@@ -84,7 +84,7 @@ def remove(self):
         node = self.frontier[0]
         self.frontier = self.frontier[1:]
         return node
-`
+```
 
 ### Greedy Best-First Search (GBFS)
 
