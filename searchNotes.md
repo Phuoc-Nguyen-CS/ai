@@ -53,6 +53,7 @@
     - At worst, it will explore every possible path before finding the solution.
 
 > The given code removes the last node in the frontier and returns it.
+
 `
 def remove(self):
     if self.empty():
@@ -74,6 +75,7 @@ def remove(self):
     - At worst, algorithm takes the longest possible time to run.
 
 > The given code shows removes the first node in the frontier and returns it
+
 `
 def remove(self):
     if self.empty():
