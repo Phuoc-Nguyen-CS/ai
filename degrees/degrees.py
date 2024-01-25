@@ -26,12 +26,9 @@ def load_data(directory):
                 "birth": row["birth"],
                 "movies": set()
             }
-            print(f'Before: {type(names)}')
             if row["name"].lower() not in names:
-                print(f'If: {type(names)}')
                 names[row["name"].lower()] = {row["id"]}
             else:
-                print(f'Else: {type(names)}')
                 names[row["name"].lower()].add(row["id"])
 
     # Load movies
@@ -56,6 +53,7 @@ def load_data(directory):
 
 
 def main():
+    # Decides which directory of data to look from
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
     directory = sys.argv[1] if len(sys.argv) == 2 else "large"
@@ -65,6 +63,7 @@ def main():
     load_data(directory)
     print("Data loaded.")
 
+    # Takes input from the user
     source = person_id_for_name(input("Name: "))
     if source is None:
         sys.exit("Person not found.")
@@ -72,6 +71,7 @@ def main():
     if target is None:
         sys.exit("Person not found.")
 
+    # Passes in the ID according to
     path = shortest_path(source, target)
 
     if path is None:
@@ -80,9 +80,12 @@ def main():
         degrees = len(path)
         print(f"{degrees} degrees of separation.")
         path = [(None, source)] + path
+        print(path)
         for i in range(degrees):
             person1 = people[path[i][1]]["name"]
+            # print(people[path[i][1]]["name"])
             person2 = people[path[i + 1][1]]["name"]
+            # print(people[path[i + 1][1]]["name"])
             movie = movies[path[i + 1][0]]["title"]
             print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
@@ -95,8 +98,43 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    num_explored = 0
+    explored_set = set()
+
+    start = Node(state = source, parent = None, action = None)
+    frontier = QueueFrontier()
+    frontier.add(start)
+
+    while True:
+        
+        # If nothing in frontier, no solution
+        if frontier.empty():
+            return None
+        
+        node = frontier.remove()
+
+        explored_set.add(node.state)
+
+        neighbors = neighbors_for_person(node.state)
+
+        for movie, actor in neighbors:
+            # if actor not in explored_set and not frontier.contains_state(actor):
+            if actor not in explored_set:
+                child = Node(state = actor, parent = node, action = movie)
+                if child.state == target:
+                    path = []
+                    node = child
+                    while node.parent is not None:
+                        path.append((node.action, node.state))
+                        node = node.parent
+                    path.reverse()
+                    return path
+                frontier.add(child)
+
+
+    print(source, target)
+    
+    # raise NotImplementedError
 
 
 def person_id_for_name(name):
